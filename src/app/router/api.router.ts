@@ -1,7 +1,8 @@
 import {Router} from "express";
 import {RunesRouter} from "./runes.router";
-import {ApiError} from "../utils/api.error";
-import {VersionKeyRemover} from "../utils/version.key.remover";
+import {VKeyRemoverMiddleware} from "../middleware/vkey.remover.middleware";
+import {AuthRouter} from "./auth.router";
+import {ApiErrorMiddleware} from "../middleware/api.error.middleware";
 
 export class ApiRouter {
 
@@ -9,11 +10,12 @@ export class ApiRouter {
 
     constructor() {
         this.router = Router();
-        this.router.use(VersionKeyRemover.handler);
+        this.router.use(VKeyRemoverMiddleware.handler);
 
+        this.router.use("/auth", new AuthRouter().get());
         this.router.use("/runes", new RunesRouter().get());
 
-        this.router.use(ApiError.handler);
+        this.router.use(ApiErrorMiddleware.handler);
     }
 
     public get(): Router {

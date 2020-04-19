@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 
-export function safeThrow(
+export function safethrow(
     target: object,
     key: string | symbol,
     descriptor: TypedPropertyDescriptor<(req: Request, res: Response, next: NextFunction) => Promise<any>>) {

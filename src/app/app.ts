@@ -1,14 +1,17 @@
 import express from "express";
 import {NextFunction, Request, Response} from "express-serve-static-core";
 import {ApiRouter} from "./router/api.router";
-import path from "path";
 import {MongoConnection} from "./database/mongo.connection";
+import passport from "passport";
+import PassportJwt from "passport-jwt";
+import Users from "./model/users.model";
 
 export class App {
     public app: express.Application;
-    private readonly database: MongoConnection = new MongoConnection('mongodb://localhost:27017/runescleaner');
+    private database: MongoConnection;
 
     constructor() {
+        this.database = new MongoConnection(process.env.DB_HOST);
         this.app = express();
         this.config();
         this.routes();
@@ -19,7 +22,7 @@ export class App {
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: false}));
 
-        this.app.use(express.static(path.join(__dirname, 'public')));
+        // this.app.use(express.static(path.join(__dirname, 'public')));
 
         this.app.use((req: Request, res: Response, next: NextFunction) => {
             res.header('Access-Control-Allow-Origin', '*');
@@ -35,6 +38,22 @@ export class App {
                 next();
             }
         });
+
+        passport.use(Users.createStrategy());
+        passport.serializeUser(Users.serializeUser());
+        passport.deserializeUser(Users.deserializeUser());
+        passport.use(
+            new PassportJwt.Strategy({
+                    jwtFromRequest: PassportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
+                    secretOrKey: process.env.JWT_SECRET,
+                    algorithms: ['HS256'],
+                },
+                async (payload, done) => {
+                    const user = await Users.findById(payload.sub);
+                    done(null, user ? user : false)
+                }
+            )
+        )
     }
 
     private routes() {

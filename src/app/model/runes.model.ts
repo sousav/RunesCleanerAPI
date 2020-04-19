@@ -15,3 +15,4 @@ export interface IRune extends Document {
 
 const Runes = model<IRune>("Rune", RuneSchema);
 export default Runes;
+

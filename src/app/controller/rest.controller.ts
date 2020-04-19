@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {safeThrow} from "../../decorators/safethrow";
+import {safethrow} from "../utils/safethrow.decorator";
 import {ApiError} from "../utils/api.error";
 import {Document, FilterQuery, Model, UpdateQuery} from "mongoose";
 
@@ -8,13 +8,13 @@ export class RestController<T extends Document> {
     constructor(protected collection: Model<T>) {
     }
 
-    @safeThrow
+    @safethrow
     public async gets(req: Request, res: Response) {
         const items = await this.collection.find();
         res.status(200).json(items);
     }
 
-    @safeThrow
+    @safethrow
     public async get(req: Request, res: Response) {
         const item = await this.collection.findOne(
             {_id: req.params.id} as FilterQuery<T>
@@ -25,14 +25,14 @@ export class RestController<T extends Document> {
         res.status(200).json(item);
     }
 
-    @safeThrow
+    @safethrow
     public async post(req: Request, res: Response) {
         const item = new this.collection(req.body);
         await item.save();
         res.status(201).json(item as any);
     }
 
-    @safeThrow
+    @safethrow
     public async put(req: Request, res: Response) {
         const item = await this.collection.findOneAndUpdate(
             {_id: req.params.id} as FilterQuery<T>,
@@ -45,7 +45,7 @@ export class RestController<T extends Document> {
         res.status(202).json(item);
     }
 
-    @safeThrow
+    @safethrow
     public async delete(req: Request, res: Response) {
         const item = await this.collection.deleteOne({_id: req.params.id} as FilterQuery<T>);
         if (!item) {
