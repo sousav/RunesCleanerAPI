@@ -22,8 +22,6 @@ export class App {
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: false}));
 
-        // this.app.use(express.static(path.join(__dirname, 'public')));
-
         this.app.use((req: Request, res: Response, next: NextFunction) => {
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
