@@ -1,5 +1,5 @@
 {
-  "name": "runescleanerapi",
+  "name": "typescript-restapi",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sousav/RunesCleanerAPI.git"
+    "url": "git+https://github.com/sousav/Typescript-RestAPI.git"
   },
   "author": "Victor Sousa",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sousav/RunesCleanerAPI/issues"
+    "url": "https://github.com/sousav/Typescript-RestAPI/issues"
   },
-  "homepage": "https://github.com/sousav/RunesCleanerAPI#readme",
+  "homepage": "https://github.com/sousav/Typescript-RestAPI#readme",
   "dependencies": {
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
