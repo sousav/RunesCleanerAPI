@@ -29,9 +29,6 @@ export class AuthController {
         ]
     };
 
-    constructor() {
-    }
-
     public signJWT(req: Request, res: Response) {
         const user = req.user as IUser;
 

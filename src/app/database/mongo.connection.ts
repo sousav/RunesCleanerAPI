@@ -7,7 +7,9 @@ export class MongoConnection {
             useNewUrlParser: true,
             useFindAndModify: false,
             useUnifiedTopology: true
-        }).then(_ => console.log("Database connection opened."));
+        }).then(undefined, /* istanbul ignore next */ _ => {
+            console.error("Database connection failed.")
+        });
     }
 
 

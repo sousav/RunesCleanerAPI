@@ -48,7 +48,8 @@ export class RestController<T extends Document> {
     @safethrow
     public async delete(req: Request, res: Response) {
         const item = await this.collection.deleteOne({_id: req.params.id} as FilterQuery<T>);
-        if (!item) {
+        console.log(item)
+        if (!item || !item.deletedCount ) {
             ApiError.ItemNotFound()
         }
         res.status(204).end();
