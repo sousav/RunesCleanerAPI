@@ -22,7 +22,6 @@ export class RestController<T extends Document> {
         if (!item) {
             ApiError.ItemNotFound();
         }
-        const t : Object = undefined;
         res.status(200).json(item);
     }
 
