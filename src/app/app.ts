@@ -1,5 +1,4 @@
-import express from "express";
-import {NextFunction, Request, Response} from "express-serve-static-core";
+import express, {NextFunction, Request, Response} from "express";
 import {ApiRouter} from "./router/api.router";
 import {MongoConnection} from "./database/mongo.connection";
 import passport from "passport";
@@ -42,14 +41,14 @@ export class App {
         passport.deserializeUser(Users.deserializeUser());
         passport.use(
             new PassportJwt.Strategy({
-                    jwtFromRequest: PassportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
-                    secretOrKey: process.env.JWT_SECRET,
-                    algorithms: ['HS256'],
-                },
-                async (payload, done) => {
-                    const user = await Users.findById(payload.sub);
-                    done(null, user ? user : false)
-                }
+                jwtFromRequest: PassportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
+                secretOrKey: process.env.JWT_SECRET,
+                algorithms: ['HS256'],
+            },
+            async (payload, done) => {
+                const user = await Users.findById(payload.sub);
+                done(null, user ? user : false)
+            }
             )
         )
     }

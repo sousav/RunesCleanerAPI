@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import {App} from "./app/app";
-import * as http from "http";
-import {Server} from "http";
+import http, {Server} from "http";
 import {Application} from "express";
 import {AddressInfo} from "net";
 
@@ -25,18 +24,18 @@ class Index {
 
             const bind = (typeof this.port === 'string' ? 'Pipe ' : 'Port ') + this.port;
             switch (error.code) {
-                case 'EACCES':
-                    console.error(bind + ' requires elevated privileges');
-                    process.exit(1);
-                    break;
-                case 'EADDRINUSE':
-                    console.error(bind + ' is already in use');
-                    process.exit(1);
-                    break;
-                case "ERR_ASSERTION":
-                    break;
-                default:
-                    throw error;
+            case 'EACCES':
+                console.error(bind + ' requires elevated privileges');
+                process.exit(1);
+                break;
+            case 'EADDRINUSE':
+                console.error(bind + ' is already in use');
+                process.exit(1);
+                break;
+            case "ERR_ASSERTION":
+                break;
+            default:
+                throw error;
             }
         });
         this.server.on('listening', () => {
