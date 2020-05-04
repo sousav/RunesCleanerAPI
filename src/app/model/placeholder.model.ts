@@ -1,6 +1,6 @@
-import {Document, model, Schema} from "mongoose";
+import { Document, Model, model, Schema } from "mongoose";
 
-export const PlaceholderSchema = new Schema(
+export const PlaceholderSchema: Schema = new Schema(
     {
         name: {type: String, required: true}
     },
@@ -13,6 +13,4 @@ export interface IPlaceholder extends Document {
     name: string;
 }
 
-const Placeholders = model<IPlaceholder>("Placeholder", PlaceholderSchema);
-export default Placeholders;
-
+export const Placeholders: Model<IPlaceholder> = model<IPlaceholder>("Placeholder", PlaceholderSchema);
