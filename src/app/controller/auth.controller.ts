@@ -2,7 +2,7 @@ import { check } from "express-validator";
 import HttpStatus from "http-status-codes";
 import JWT from "jsonwebtoken";
 import { AuthenticationResult } from "mongoose";
-import { Path, POST, PreProcessor } from "typescript-rest";
+import { Path, POST } from "typescript-rest";
 
 import { Validate, } from "../decorator/validator.decorator";
 import { ILoginForm } from "../form/login.form";

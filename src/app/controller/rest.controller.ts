@@ -1,5 +1,5 @@
 import { Document, FilterQuery, Model, UpdateQuery } from "mongoose";
-import { DELETE, GET, Path, POST, PreProcessor, PUT, Return } from "typescript-rest";
+import { DELETE, GET, Path, POST, PUT, Return } from "typescript-rest";
 
 import { Auth } from "../decorator/auth.decorator";
 import { ApiError } from "../utils/api.error";

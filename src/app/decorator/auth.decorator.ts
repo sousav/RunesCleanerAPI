@@ -11,6 +11,7 @@ export class Auth {
     public static Required(): any {
         return PreProcessor(Auth._required);
     }
+
     private static _required(req: Request, res: Response): void {
         passport.authenticate("jwt", {session: false}, (err: Error, user: IUser): void => {
             if (err || !user) {
