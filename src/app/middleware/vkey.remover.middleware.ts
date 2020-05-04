@@ -1,8 +1,8 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 
 export class VKeyRemoverMiddleware {
 
-    static handler(req: Request, res: Response, next: NextFunction) {
+    public static handler(req: Request, res: Response, next: NextFunction): void {
         delete req.body.__v;
         next();
     }

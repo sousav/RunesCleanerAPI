@@ -1,14 +1,15 @@
-import {connect} from "mongoose";
+import { connect } from "mongoose";
 
 export class MongoConnection {
 
-    constructor(private uri: string) {
-        connect(this.uri, {
+    public constructor(uri: string) {
+        connect(uri, {
             useNewUrlParser: true,
             useFindAndModify: false,
             useUnifiedTopology: true
-        }).then(_ => console.log("Database connection opened."));
+        }).then(undefined, /* istanbul ignore next */ (_: Error): void => {
+            console.error("Database connection failed.");
+        });
     }
-
 
 }

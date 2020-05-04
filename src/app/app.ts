@@ -1,37 +1,42 @@
-import express from "express";
-import {NextFunction, Request, Response} from "express-serve-static-core";
-import {ApiRouter} from "./router/api.router";
-import {MongoConnection} from "./database/mongo.connection";
+import e, { Application, json, NextFunction, Request, Response, Router, urlencoded } from "express";
+import HttpStatus from "http-status-codes";
 import passport from "passport";
-import PassportJwt from "passport-jwt";
-import Users from "./model/users.model";
+import PassportJwt, { VerifiedCallback } from "passport-jwt";
+import { Server } from "typescript-rest";
+
+import { AuthController } from "./controller/auth.controller";
+import { PlaceholdersController } from "./controller/placeholder.controller";
+import { MongoConnection } from "./database/mongo.connection";
+import { ApiErrorMiddleware } from "./middleware/api.error.middleware";
+import { VKeyRemoverMiddleware } from "./middleware/vkey.remover.middleware";
+import { IUser, Users } from "./model/users.model";
 
 export class App {
-    public app: express.Application;
-    private database: MongoConnection;
+    public readonly app: Application;
+    private readonly database: MongoConnection;
 
-    constructor() {
-        this.database = new MongoConnection(process.env.DB_HOST);
-        this.app = express();
+    public constructor() {
+        this.database = new MongoConnection(process.env.DB_HOST!);
+        this.app = e();
         this.config();
         this.routes();
     }
 
     private config(): void {
-        this.app.disable('x-powered-by');
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({extended: false}));
+        this.app.disable("x-powered-by");
+        this.app.use(json());
+        this.app.use(urlencoded({extended: false}));
 
-        this.app.use((req: Request, res: Response, next: NextFunction) => {
-            res.header('Access-Control-Allow-Origin', '*');
-            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-            res.header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PATCH, PUT, OPTIONS');
+        this.app.use((req: Request, res: Response, next: NextFunction): void => {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+            res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, PATCH, PUT, OPTIONS");
             next();
         });
 
-        this.app.use((req: Request, res: Response, next: NextFunction) => {
-            if (req.method === 'OPTIONS') {
-                res.status(204).send('');
+        this.app.use((req: Request, res: Response, next: NextFunction): void => {
+            if (req.method === "OPTIONS") {
+                res.status(HttpStatus.NO_CONTENT).send("");
             } else {
                 next();
             }
@@ -44,22 +49,26 @@ export class App {
             new PassportJwt.Strategy({
                     jwtFromRequest: PassportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
                     secretOrKey: process.env.JWT_SECRET,
-                    algorithms: ['HS256'],
+                    algorithms: ["HS256"]
                 },
-                async (payload, done) => {
-                    const user = await Users.findById(payload.sub);
-                    done(null, user ? user : false)
+                // tslint:disable-next-line:no-any
+                async (payload: any, done: VerifiedCallback): Promise<void> => {
+                    const user: IUser | undefined = await Users.findById(payload.sub);
+                    done(undefined, user ? user : false);
                 }
             )
-        )
+        );
     }
 
-    private routes() {
-        this.app.use("/api", new ApiRouter().get());
+    private routes(): void {
+        const api: Router = Router();
 
-        this.app.use((req: Request, res: Response) => {
-            res.status(404);
-            res.send({error: 'no corresponding request found'});
-        });
+        api.use(VKeyRemoverMiddleware.handler);
+        Server.buildServices(api, AuthController, PlaceholdersController);
+        api.use(ApiErrorMiddleware.handler);
+
+        this.app.use("/api", api);
     }
 }
+
+export const app: Application = new App().app;

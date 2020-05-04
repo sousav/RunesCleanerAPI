@@ -1,9 +1,13 @@
-import Placeholders, {IPlaceholder} from "../model/placeholder.model";
-import {RestController} from "./rest.controller";
+import { Path } from "typescript-rest";
 
+import { IPlaceholder, Placeholders } from "../model/placeholder.model";
+
+import { RestController } from "./rest.controller";
+
+@Path("placeholders")
 export class PlaceholdersController extends RestController<IPlaceholder> {
 
-    constructor() {
+    public constructor() {
         super(Placeholders);
     }
 

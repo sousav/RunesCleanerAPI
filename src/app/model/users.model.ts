@@ -1,7 +1,7 @@
-import {Document, model, PassportLocalModel, Schema} from "mongoose";
-import passportLocalMongoose from "passport-local-mongoose"
+import { Document, model, PassportLocalModel, Schema } from "mongoose";
+import passportLocalMongoose from "passport-local-mongoose";
 
-export const UserSchema = new Schema(
+export const userSchema: Schema = new Schema(
     {
         email: {type: String, required: true}
     },
@@ -10,8 +10,8 @@ export const UserSchema = new Schema(
     }
 );
 
-UserSchema.plugin(passportLocalMongoose, {
-    usernameField: 'email',
+userSchema.plugin(passportLocalMongoose, {
+    usernameField: "email",
     usernameLowerCase: true,
     session: false
 });
@@ -20,6 +20,4 @@ export interface IUser extends Document {
     email: string;
 }
 
-const Users = model<IUser>("Users", UserSchema) as PassportLocalModel<IUser>;
-
-export default Users;
+export const Users: PassportLocalModel<IUser> = model<IUser>("Users", userSchema) as PassportLocalModel<IUser>;

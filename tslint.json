@@ -1,14 +1,68 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint:recommended"
+    "tslint:all"
   ],
+  "linterOptions": {
+    "exclude": [
+      "test/**/*.ts"
+    ]
+  },
   "jsRules": {},
   "rules": {
     "trailing-comma": [
       false
     ],
-    "no-console": false
+    "no-console": false,
+    "no-null-keyword": true,
+    "no-non-null-assertion": false,
+    "no-unnecessary-class": {
+      "options": [
+        "allow-static-only",
+        "allow-constructor-only"
+      ]
+    },
+    "no-unbound-method": {
+      "options": [
+        "ignore-static"
+      ]
+    },
+    "newline-per-chained-call": false,
+    "match-default-export-name": false,
+    "strict-boolean-expressions": {
+      "options": [
+        "allow-undefined-union",
+        "allow-null-union",
+        "allow-string",
+        "allow-number"
+      ]
+    },
+    "object-literal-sort-keys": false,
+    "variable-name": {
+      "options": "allow-pascal-case"
+    },
+    "no-object-literal-type-assertion": [
+      true,
+      {
+        "allow-arguments": true
+      }
+    ],
+    "member-ordering": {
+      "options": {
+        "alphabetize": false
+      }
+    },
+    "align": {
+      "options": [
+        "statements",
+        "elements",
+        "members"
+      ]
+    },
+    "no-unsafe-any": false,
+    "await-promise": false,
+    "completed-docs": false
+    // TODO Remove this rules
   },
   "rulesDirectory": []
 }
